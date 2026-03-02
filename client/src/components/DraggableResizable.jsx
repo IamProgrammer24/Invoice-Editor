@@ -1,7 +1,25 @@
+import { useState, useRef, useEffect } from "react";
 import { Rnd } from "react-rnd";
 
-const DraggableResizable = ({ children, layout }) => {
+const DraggableResizable = ({ children, layout, onDragResize }) => {
+  const [isSelected, setIsSelected] = useState(false);
+  const wrapperRef = useRef(null); // actual DOM wrapper
+
   if (!layout) return null;
+
+  // Deselect when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+        setIsSelected(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <Rnd
@@ -13,24 +31,38 @@ const DraggableResizable = ({ children, layout }) => {
         height: layout.height,
       }}
       enableResizing
-      className="hover:border hover:border-blue-500"
       onDragStop={(e, d) => {
-        console.log("Drag:", {
-          x: d.x,
-          y: d.y,
-        });
+        e.stopPropagation();
+        onDragResize?.({ type: "drag", x: d.x, y: d.y });
       }}
-      onResizeStop={(e, direction, ref, delta, position) => {
-        console.log("Resize:", {
-          x: position.x,
-          y: position.y,
+      onDragStart={(e) => e.stopPropagation()}
+      onResizeStart={(e) => e.stopPropagation()}
+      onResizeStop={(e, dir, ref, delta, pos) => {
+        e.stopPropagation();
+        onDragResize?.({
+          type: "resize",
+          x: pos.x,
+          y: pos.y,
           width: ref.offsetWidth,
           height: ref.offsetHeight,
         });
       }}
+      onMouseDown={(e) => {
+        e.stopPropagation();
+        setIsSelected(true);
+      }}
+      className="cursor-move"
     >
-      {children}
+      <div
+        ref={wrapperRef}
+        className={`relative w-full h-full ${
+          isSelected ? "border-2 border-blue-500" : ""
+        }`}
+      >
+        {children}
+      </div>
     </Rnd>
   );
 };
+
 export default DraggableResizable;

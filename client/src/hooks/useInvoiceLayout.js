@@ -5,19 +5,35 @@ const useInvoiceLayout = () => {
 
   /* ---------- REFS ---------- */
   const invoiceRef = useRef(null);
-
   const companyRef = useRef(null);
+  const titleRef = useRef(null);
   const customerRef = useRef(null);
   const itemsRef = useRef(null);
   const totalRef = useRef(null);
   const notesRef = useRef(null);
   const dividerRef = useRef(null);
 
-  /* ---------- GET POSITION ---------- */
+  /* ---------- GET POSITION RELATIVE TO INVOICE ---------- */
   const getLayout = (ref) => {
-    const parentRect = invoiceRef.current.getBoundingClientRect();
+    if (!invoiceRef.current || !ref.current) return null;
 
+    const parentRect = invoiceRef.current.getBoundingClientRect();
     const rect = ref.current.getBoundingClientRect();
+
+    return {
+      x: rect.left - parentRect.left,
+      y: rect.top - parentRect.top,
+      width: rect.width,
+      height: rect.height,
+    };
+  };
+
+  /* ---------- GET CHILD POSITION RELATIVE TO PARENT ---------- */
+  const getLayoutRelativeToParent = (childRef, parentRef) => {
+    if (!childRef.current || !parentRef.current) return null;
+
+    const parentRect = parentRef.current.getBoundingClientRect();
+    const rect = childRef.current.getBoundingClientRect();
 
     return {
       x: rect.left - parentRect.left,
@@ -30,7 +46,10 @@ const useInvoiceLayout = () => {
   /* ---------- CAPTURE LAYOUT ---------- */
   const captureLayout = () => {
     setLayout({
-      company: getLayout(companyRef),
+      company: {
+        container: getLayout(companyRef),
+        title: getLayoutRelativeToParent(titleRef, companyRef),
+      },
       customer: getLayout(customerRef),
       items: getLayout(itemsRef),
       total: getLayout(totalRef),
@@ -44,6 +63,7 @@ const useInvoiceLayout = () => {
     captureLayout,
     invoiceRef,
     companyRef,
+    titleRef,
     customerRef,
     itemsRef,
     totalRef,

@@ -1,22 +1,26 @@
-const CompanySection = ({ data }) => {
+import DraggableResizable from "./DraggableResizable";
+
+const CompanySection = ({ data, layout, refs, editMode }) => {
   return (
-    <div className="flex justify-between mb-12">
+    <div className="relative mb-12" style={{ width: "100%", minHeight: 150 }}>
+      {/* ================= LEFT ================= */}
+      {editMode ? (
+        <DraggableResizable layout={layout?.title}>
+          <h1 className="text-5xl font-bold cursor-move">INVOICE</h1>
+        </DraggableResizable>
+      ) : (
+        <div ref={refs?.titleRef}>
+          <h1 className="text-5xl font-bold">INVOICE</h1>
+        </div>
+      )}
 
-      {/* LEFT */}
-      <h1 className="text-5xl font-bold tracking-wide">
-        INVOICE
-      </h1>
-
-      {/* RIGHT */}
-      <div className="text-right">
-        <h2 className="font-semibold text-lg">
-          {data.company.name}
-        </h2>
+      {/* ================= RIGHT ================= */}
+      <div className="absolute right-0 top-0 text-right">
+        <h2 className="font-semibold text-lg">{data.company.name}</h2>
         <p>{data.company.address}</p>
         <p>{data.company.email}</p>
         <p>{data.company.phone}</p>
       </div>
-
     </div>
   );
 };

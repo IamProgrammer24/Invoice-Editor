@@ -9,28 +9,23 @@ import TotalSection from "./TotalSection";
 import DraggableResizable from "./DraggableResizable";
 import useInvoiceLayout from "../hooks/useInvoiceLayout";
 
-/* -----------------------------
-        Invoice Canvas
---------------------------------*/
 const InvoiceCanvas = ({ invoiceData }) => {
   const [editMode, setEditMode] = useState(false);
 
-  /* ✅ Layout Hook */
   const {
     layout,
     captureLayout,
     invoiceRef,
     companyRef,
     customerRef,
+    titleRef,
     itemsRef,
     totalRef,
     notesRef,
     dividerRef,
   } = useInvoiceLayout();
 
-  /* =============================
-        PREVIEW MODE
-  ==============================*/
+  /* ====================== PREVIEW MODE ====================== */
   if (!editMode) {
     return (
       <div className="flex flex-col items-center">
@@ -48,13 +43,14 @@ const InvoiceCanvas = ({ invoiceData }) => {
           ref={invoiceRef}
           id="invoice"
           className="bg-white shadow-xl p-12 text-gray-800"
-          style={{
-            width: "800px",
-            minHeight: "1100px",
-          }}
+          style={{ width: "800px", minHeight: "1100px" }}
         >
           <div ref={companyRef}>
-            <CompanySection data={invoiceData} />
+            <CompanySection
+              data={invoiceData}
+              refs={{ titleRef }}
+              editMode={false}
+            />
           </div>
 
           <div ref={customerRef}>
@@ -81,9 +77,7 @@ const InvoiceCanvas = ({ invoiceData }) => {
     );
   }
 
-  /* =============================
-        EDIT MODE
-  ==============================*/
+  /* ====================== EDIT MODE ====================== */
   return (
     <div className="flex flex-col items-center">
       <button
@@ -97,13 +91,15 @@ const InvoiceCanvas = ({ invoiceData }) => {
         ref={invoiceRef}
         id="invoice"
         className="relative bg-white shadow-xl p-12"
-        style={{
-          width: "800px",
-          minHeight: "1100px",
-        }}
+        style={{ width: "800px", minHeight: "1100px" }}
       >
-        <DraggableResizable layout={layout.company}>
-          <CompanySection data={invoiceData} />
+        <DraggableResizable layout={layout.company?.container}>
+          <CompanySection
+            data={invoiceData}
+            layout={layout.company}
+            refs={{ titleRef }}
+            editMode={true}
+          />
         </DraggableResizable>
 
         <DraggableResizable layout={layout.customer}>

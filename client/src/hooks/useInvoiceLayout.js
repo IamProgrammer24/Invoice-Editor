@@ -1,7 +1,36 @@
 import { useRef, useState } from "react";
 
 const useInvoiceLayout = () => {
-  const [layout, setLayout] = useState({});
+  const [layout, setLayout] = useState({
+    test: {
+      x: 49,
+      y: 40,
+      width: 200,
+      height: 50,
+      defaultFontSize: 40,
+    },
+    companyName: {
+      x: 566,
+      y: 49,
+      width: 200,
+      height: 50,
+      defaultFontSize: 18,
+    },
+    companyAdd: {
+      x: 618,
+      y: 76,
+      width: 150,
+      height: 50,
+      defaultFontSize: 16,
+    },
+    companyMail: {
+      x: 551,
+      y: 101,
+      width: 150,
+      height: 50,
+      defaultFontSize: 16,
+    },
+  });
 
   /* ---------- REFS ---------- */
   const invoiceRef = useRef(null);
@@ -12,6 +41,8 @@ const useInvoiceLayout = () => {
   const totalRef = useRef(null);
   const notesRef = useRef(null);
   const dividerRef = useRef(null);
+  const noreref = useRef(null);
+  const testref = useRef(null);
 
   /* ---------- GET POSITION RELATIVE TO INVOICE ---------- */
   const getLayout = (ref) => {
@@ -65,6 +96,8 @@ const useInvoiceLayout = () => {
     companyRef,
     titleRef,
     customerRef,
+    noreref,
+    testref,
     itemsRef,
     totalRef,
     notesRef,

@@ -4,7 +4,7 @@ import { Rnd } from "react-rnd";
 const DraggableResizable = ({ children, layout, onDragResize }) => {
   const [isSelected, setIsSelected] = useState(false);
   const wrapperRef = useRef(null); // actual DOM wrapper
-
+  console.log("draggable", layout);
   if (!layout) return null;
 
   // Deselect when clicking outside
@@ -39,6 +39,7 @@ const DraggableResizable = ({ children, layout, onDragResize }) => {
       onResizeStart={(e) => e.stopPropagation()}
       onResizeStop={(e, dir, ref, delta, pos) => {
         e.stopPropagation();
+
         onDragResize?.({
           type: "resize",
           x: pos.x,

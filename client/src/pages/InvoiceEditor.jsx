@@ -8,7 +8,9 @@ const InvoiceEditor = () => {
   const generateInvoice = async () => {
     try {
       const response = await fetch("http://localhost:5000/api/invoices");
+
       const data = await response.json();
+      console.log(data);
 
       // if backend sends { success: true, data: mockInvoice }
       setInvoiceData(data.data);

@@ -15,6 +15,13 @@ const InvoiceCanvas = ({ invoiceData }) => {
   const [editMode, setEditMode] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
 
+  const subtotal = invoiceData.items.reduce(
+    (acc, item) => acc + item.qty * item.price,
+    0,
+  );
+
+  const taxAmount = (subtotal * invoiceData.tax) / 100;
+  const grandTotal = subtotal + taxAmount;
   const {
     layout,
     captureLayout,
@@ -31,7 +38,7 @@ const InvoiceCanvas = ({ invoiceData }) => {
   } = useInvoiceLayout();
 
   const [tempLayout, setTempLayout] = useState(layout);
-  console.log(layout.description);
+
   const tableRef = useRef(null);
   const [tableHeight, setTableHeight] = useState(0);
 
@@ -39,7 +46,6 @@ const InvoiceCanvas = ({ invoiceData }) => {
     if (tableRef.current) {
       const height = tableRef.current.offsetHeight;
       setTableHeight(height);
-      console.log("table height:", height);
     }
   }, [invoiceData]);
 
@@ -123,7 +129,6 @@ const InvoiceCanvas = ({ invoiceData }) => {
   const totalAmountSize = getDynamicFontSize(tempLayout.totalAmount);
 
   if (!editMode) {
-    console.log("Current layout:", layout);
     return (
       <div className="flex flex-col items-center">
         <div className="flex items-center gap-3 mb-4">
@@ -207,7 +212,7 @@ const InvoiceCanvas = ({ invoiceData }) => {
               fontWeight: "600",
             }}
           >
-            Tech Solutions Pvt Ltd
+            {invoiceData.company.name}
           </div>
           <div
             style={{
@@ -219,7 +224,7 @@ const InvoiceCanvas = ({ invoiceData }) => {
               fontSize: "16px",
             }}
           >
-            Gwalior, MP, India
+            {invoiceData.company.address}
           </div>
           <div
             style={{
@@ -231,7 +236,7 @@ const InvoiceCanvas = ({ invoiceData }) => {
               fontSize: "16px",
             }}
           >
-            contact@techsolutions.com
+            {invoiceData.company.email}
           </div>
           <div
             style={{
@@ -257,8 +262,8 @@ const InvoiceCanvas = ({ invoiceData }) => {
               fontSize: "16px",
             }}
           >
-            Rahul Sharma <br />
-            Delhi, India
+            <span>{invoiceData.customer.name}</span> <br />
+            <span>{invoiceData.customer.address}</span>
           </div>
           <div
             style={{
@@ -284,7 +289,7 @@ const InvoiceCanvas = ({ invoiceData }) => {
               fontSize: "16px",
             }}
           >
-            27 Feb 2026
+            {invoiceData.invoiceInfo.date}
           </div>
           <div
             style={{
@@ -310,7 +315,7 @@ const InvoiceCanvas = ({ invoiceData }) => {
               fontSize: "16px",
             }}
           >
-            INV-101
+            {invoiceData.invoiceInfo.invoiceNumber}
           </div>
           <div
             style={{
@@ -445,7 +450,7 @@ const InvoiceCanvas = ({ invoiceData }) => {
                 fontSize: "16px",
               }}
             >
-              ₹5000
+              {subtotal}
             </div>
             <div
               style={{
@@ -469,7 +474,7 @@ const InvoiceCanvas = ({ invoiceData }) => {
                 fontSize: "16px",
               }}
             >
-              ₹1980
+              {taxAmount}
             </div>
             <div
               style={{
@@ -502,7 +507,7 @@ const InvoiceCanvas = ({ invoiceData }) => {
                 fontSize: "16px",
               }}
             >
-              ₹2000
+              {grandTotal}
             </div>
             <div
               style={{
@@ -620,7 +625,7 @@ const InvoiceCanvas = ({ invoiceData }) => {
               fontWeight: "600",
             }}
           >
-            Tech Solutions Pvt Ltd
+            {invoiceData.company.name}
           </div>
         </DraggableResizable>
         <DraggableResizable
@@ -641,7 +646,7 @@ const InvoiceCanvas = ({ invoiceData }) => {
               fontSize: companyAddSize,
             }}
           >
-            Gwalior, MP, India
+            {invoiceData.company.address}
           </div>
         </DraggableResizable>
         <DraggableResizable
@@ -663,7 +668,7 @@ const InvoiceCanvas = ({ invoiceData }) => {
               fontSize: companyMailSize,
             }}
           >
-            contact@techsolutions.com
+            {invoiceData.company.email}
           </div>
         </DraggableResizable>
         <DraggableResizable
@@ -709,8 +714,8 @@ const InvoiceCanvas = ({ invoiceData }) => {
               fontSize: billNameSize,
             }}
           >
-            Rahul Sharma <br />
-            Delhi, India
+            <span>{invoiceData.customer.name}</span> <br />
+            <span>{invoiceData.customer.address}</span>
           </div>
         </DraggableResizable>
         <DraggableResizable
@@ -755,7 +760,7 @@ const InvoiceCanvas = ({ invoiceData }) => {
               fontSize: billDate1Size,
             }}
           >
-            27 Feb 2026
+            {invoiceData.invoiceInfo.date}
           </div>
         </DraggableResizable>
         <DraggableResizable
@@ -801,7 +806,7 @@ const InvoiceCanvas = ({ invoiceData }) => {
               fontSize: invoiceNumber1Szide,
             }}
           >
-            INV-101
+            {invoiceData.invoiceInfo.invoiceNumber}
           </div>
         </DraggableResizable>
         <DraggableResizable
@@ -921,7 +926,7 @@ const InvoiceCanvas = ({ invoiceData }) => {
                 fontSize: subtotalAmountSize,
               }}
             >
-              ₹5000
+              {subtotal}
             </div>
           </DraggableResizable>
           <DraggableResizable
@@ -965,7 +970,7 @@ const InvoiceCanvas = ({ invoiceData }) => {
                 fontSize: taxAmountSize,
               }}
             >
-              ₹1980
+              {taxAmount}
             </div>
           </DraggableResizable>
           <DraggableResizable layout={tempLayout.border}>
@@ -1017,7 +1022,7 @@ const InvoiceCanvas = ({ invoiceData }) => {
                 fontSize: totalAmountSize,
               }}
             >
-              ₹2000
+              {grandTotal}
             </div>
           </DraggableResizable>
           <DraggableResizable

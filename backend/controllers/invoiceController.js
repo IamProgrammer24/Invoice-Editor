@@ -1,23 +1,62 @@
 import { mockInvoice } from "../data/mockInvoice.js";
 
-export const getInvoices = (req, res) => {
+import Invoice from "../models/Invoice.js";
+
+export const createInvoice = async (req, res) => {
   try {
+    const invoice = new Invoice(req.body);
+
+    const savedInvoice = await invoice.save();
+
+    res.status(201).json(savedInvoice);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const getInvoices = async (req, res) => {
+  try {
+    const invoices = await Invoice.find();
+
     res.status(200).json({
-      success: true,
-      data: mockInvoice,
+      data: invoices[0],
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Failed to fetch invoice",
+      message: "Failed to fetch invoices",
+      error: error.message,
     });
   }
 };
 
-export const createInvoice = (req, res) => {
-  res.status(201).json({
-    message: "Create invoice API not implemented yet",
-  });
+export const updateInvoice = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const updatedInvoice = await Invoice.findByIdAndUpdate(id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!updatedInvoice) {
+      return res.status(404).json({
+        success: false,
+        message: "Invoice not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: updatedInvoice,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Failed to update invoice",
+      error: error.message,
+    });
+  }
 };
 
 export const deleteInvoice = (req, res) => {

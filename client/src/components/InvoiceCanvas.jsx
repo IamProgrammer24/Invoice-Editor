@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as htmlToImage from "html-to-image";
 import jsPDF from "jspdf";
 
@@ -32,6 +32,16 @@ const InvoiceCanvas = ({ invoiceData }) => {
 
   const [tempLayout, setTempLayout] = useState(layout);
   console.log(layout.description);
+  const tableRef = useRef(null);
+  const [tableHeight, setTableHeight] = useState(0);
+
+  useEffect(() => {
+    if (tableRef.current) {
+      const height = tableRef.current.offsetHeight;
+      setTableHeight(height);
+      console.log("table height:", height);
+    }
+  }, [invoiceData]);
 
   useEffect(() => {
     if (editMode) {
@@ -105,6 +115,12 @@ const InvoiceCanvas = ({ invoiceData }) => {
   const rateSize = getDynamicFontSize(tempLayout.rateSize);
   const qtySize = getDynamicFontSize(tempLayout.qty);
   const amountSize = getDynamicFontSize(tempLayout.amount);
+  const subtotalSize = getDynamicFontSize(tempLayout.subtotal);
+  const subtotalAmountSize = getDynamicFontSize(tempLayout.subtotalAmount);
+  const taxSize = getDynamicFontSize(tempLayout.tax);
+  const taxAmountSize = getDynamicFontSize(tempLayout.taxAmount);
+  const totalSize = getDynamicFontSize(tempLayout.total);
+  const totalAmountSize = getDynamicFontSize(tempLayout.totalAmount);
 
   if (!editMode) {
     console.log("Current layout:", layout);
@@ -143,7 +159,7 @@ const InvoiceCanvas = ({ invoiceData }) => {
           className="relative bg-white shadow-xl p-12 text-gray-800"
           style={{ width: "794px", minHeight: "1123px" }}
         >
-          <div ref={companyRef}>
+          {/* <div ref={companyRef}>
             <CompanySection
               data={invoiceData}
               refs={{ titleRef }}
@@ -159,22 +175,14 @@ const InvoiceCanvas = ({ invoiceData }) => {
             <div className="border-b-2 border-blue-600 mb-8"></div>
           </div>
 
-          <div ref={itemsRef}>
-            <ItemsTable data={invoiceData} />
-          </div>
-
           <div ref={totalRef}>
             <TotalSection data={invoiceData} />
           </div>
 
           <div ref={notesRef}>
             <Notes />
-          </div>
+          </div> */}
 
-          <div className="absolute">
-            <p className="text-blue-600 font-semibold">Notes</p>
-            <p>Thank you for your business!</p>
-          </div>
           <div
             style={{
               position: "absolute",
@@ -340,7 +348,7 @@ const InvoiceCanvas = ({ invoiceData }) => {
             }}
             className="border-b-2 border-blue-600"
           ></div>
-          <div
+          {/* <div
             style={{
               position: "absolute",
               left: "48px",
@@ -395,6 +403,118 @@ const InvoiceCanvas = ({ invoiceData }) => {
             }}
           >
             AMOUNT
+          </div> */}
+          <div
+            ref={tableRef}
+            style={{
+              position: "absolute",
+              left: "48px",
+              top: "395px",
+              width: "700px",
+            }}
+          >
+            <ItemsTable data={invoiceData} />
+          </div>
+          <div
+            style={{
+              position: "absolute",
+              left: "48px",
+              top: 395 + tableHeight,
+              width: "700px",
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                left: "418px",
+                top: "0px",
+                width: "200px",
+                height: "50px",
+                fontSize: "16px",
+              }}
+            >
+              Subtotal
+            </div>
+            <div
+              style={{
+                position: "absolute",
+                left: "647px",
+                top: "0px",
+                width: "200px",
+                height: "50px",
+                fontSize: "16px",
+              }}
+            >
+              ₹5000
+            </div>
+            <div
+              style={{
+                position: "absolute",
+                left: "418px",
+                top: "50px",
+                width: "200px",
+                height: "50px",
+                fontSize: "16px",
+              }}
+            >
+              Tax 18%:
+            </div>
+            <div
+              style={{
+                position: "absolute",
+                left: "647px",
+                top: "50px",
+                width: "200px",
+                height: "50px",
+                fontSize: "16px",
+              }}
+            >
+              ₹1980
+            </div>
+            <div
+              style={{
+                position: "absolute",
+                left: "418px",
+                top: "90px",
+                width: "300px",
+              }}
+              className="border-b-2"
+            ></div>
+            <div
+              style={{
+                position: "absolute",
+                left: "418px",
+                top: "100px",
+                width: "200px",
+                height: "50px",
+                fontSize: "16px",
+              }}
+            >
+              Total:
+            </div>
+            <div
+              style={{
+                position: "absolute",
+                left: "647px",
+                top: "100px",
+                width: "200px",
+                height: "50px",
+                fontSize: "16px",
+              }}
+            >
+              ₹2000
+            </div>
+            <div
+              style={{
+                position: "absolute",
+                left: "0px",
+                top: "150px",
+                width: "300px",
+                height: "50px",
+              }}
+            >
+              <Notes />
+            </div>
           </div>
         </div>
       </div>
@@ -444,26 +564,22 @@ const InvoiceCanvas = ({ invoiceData }) => {
             editMode={true}
           />
         </DraggableResizable> */}
-
-        {/* <DraggableResizable layout={layout.customer}>
+        {/* 
+         <DraggableResizable layout={layout.customer}>
           <CustomerSection data={invoiceData} />
-        </DraggableResizable>
-
+        </DraggableResizable> */}
+        {/* 
         <DraggableResizable layout={layout.divider}>
           <div className="border-b-2 border-blue-600 w-full"></div>
-        </DraggableResizable>
-
-        <DraggableResizable layout={layout.items}>
-          <ItemsTable data={invoiceData} />
-        </DraggableResizable>
-
-        <DraggableResizable layout={layout.total}>
-          <TotalSection data={invoiceData} />
-        </DraggableResizable>
-
-        <DraggableResizable layout={layout.notes}>
-          <Notes />
         </DraggableResizable> */}
+
+        {/* <DraggableResizable layout={layout.total}>
+          <TotalSection data={invoiceData} />
+        </DraggableResizable> */}
+
+        {/* <DraggableResizable layout={layout.notes}>
+          <Notes />
+        </DraggableResizable>  */}
         <DraggableResizable
           layout={tempLayout.test}
           onDragResize={(data) => {
@@ -737,99 +853,195 @@ const InvoiceCanvas = ({ invoiceData }) => {
           {" "}
           <div className="border-b-2 border-blue-600"></div>
         </DraggableResizable>
+        <DraggableResizable
+          layout={tempLayout.table}
+          onDragResize={(data) => {
+            setTempLayout((prev) => ({
+              ...prev,
+              table: {
+                ...prev.table,
+                ...data,
+              },
+            }));
+          }}
+        >
+          <ItemsTable
+            style={{
+              position: "absolute",
+            }}
+            data={invoiceData}
+          />
+        </DraggableResizable>
+        <div
+          className="relative"
+          style={{
+            position: "absolute",
+            left: "48px",
+            top: 395 + tableHeight,
+            width: "100%",
+            height: "40%",
+          }}
+        >
+          <DraggableResizable
+            layout={tempLayout.subtotal}
+            onDragResize={(data) => {
+              setTempLayout((prev) => ({
+                ...prev,
+                subtotal: {
+                  ...prev.subtotal,
+                  ...data,
+                },
+              }));
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                fontSize: subtotalSize,
+              }}
+            >
+              Subtotal
+            </div>
+          </DraggableResizable>
+          <DraggableResizable
+            layout={tempLayout.subtotalAmount}
+            onDragResize={(data) => {
+              setTempLayout((prev) => ({
+                ...prev,
+                subtotalAmount: {
+                  ...prev.subtotalAmount,
+                  ...data,
+                },
+              }));
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                fontSize: subtotalAmountSize,
+              }}
+            >
+              ₹5000
+            </div>
+          </DraggableResizable>
+          <DraggableResizable
+            layout={tempLayout.tax}
+            onDragResize={(data) => {
+              setTempLayout((prev) => ({
+                ...prev,
+                tax: {
+                  ...prev.tax,
+                  ...data,
+                },
+              }));
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+
+                fontSize: taxSize,
+              }}
+            >
+              Tax 18%:
+            </div>
+          </DraggableResizable>
+          <DraggableResizable
+            layout={tempLayout.taxAmount}
+            onDragResize={(data) => {
+              setTempLayout((prev) => ({
+                ...prev,
+                taxAmount: {
+                  ...prev.taxAmount,
+                  ...data,
+                },
+              }));
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+
+                fontSize: taxAmountSize,
+              }}
+            >
+              ₹1980
+            </div>
+          </DraggableResizable>
+          <DraggableResizable layout={tempLayout.border}>
+            <div
+              style={{
+                position: "absolute",
+                width: "300px",
+                height: "50px",
+              }}
+              className="border-t-2"
+            ></div>
+          </DraggableResizable>
+          <DraggableResizable
+            layout={tempLayout.total}
+            onDragResize={(data) => {
+              setTempLayout((prev) => ({
+                ...prev,
+                total: {
+                  ...prev.total,
+                  ...data,
+                },
+              }));
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                fontSize: totalSize,
+              }}
+            >
+              Total:
+            </div>
+          </DraggableResizable>
+          <DraggableResizable
+            layout={tempLayout.totalAmount}
+            onDragResize={(data) => {
+              setTempLayout((prev) => ({
+                ...prev,
+                totalAmount: {
+                  ...prev.totalAmount,
+                  ...data,
+                },
+              }));
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                fontSize: totalAmountSize,
+              }}
+            >
+              ₹2000
+            </div>
+          </DraggableResizable>
+          <DraggableResizable
+            layout={tempLayout.notes}
+            onDragResize={(data) => {
+              setTempLayout((prev) => ({
+                ...prev,
+                notes: {
+                  ...prev.notes,
+                  ...data,
+                },
+              }));
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+              }}
+            >
+              <Notes />
+            </div>
+          </DraggableResizable>
+        </div>
       </div>
-      <DraggableResizable
-        layout={tempLayout.description}
-        onDragResize={(data) => {
-          setTempLayout((prev) => ({
-            ...prev,
-            description: {
-              ...prev.description,
-              ...data,
-            },
-          }));
-        }}
-      >
-        <div
-          style={{
-            position: "absolute",
-            fontWeight: "bold",
-            color: "#2563EB",
-            fontSize: descriptionSize,
-          }}
-        >
-          DESCRIPTION
-        </div>
-      </DraggableResizable>
-      <DraggableResizable
-        layout={tempLayout.rate}
-        onDragResize={(data) => {
-          setTempLayout((prev) => ({
-            ...prev,
-            rate: {
-              ...prev.rate,
-              ...data,
-            },
-          }));
-        }}
-      >
-        <div
-          style={{
-            position: "absolute",
-            fontWeight: "bold",
-            color: "#2563EB",
-            fontSize: rateSize,
-          }}
-        >
-          RATE
-        </div>
-      </DraggableResizable>
-      <DraggableResizable
-        layout={tempLayout.qty}
-        onDragResize={(data) => {
-          setTempLayout((prev) => ({
-            ...prev,
-            qty: {
-              ...prev.qty,
-              ...data,
-            },
-          }));
-        }}
-      >
-        <div
-          style={{
-            position: "absolute",
-            fontWeight: "bold",
-            color: "#2563EB",
-            fontSize: qtySize,
-          }}
-        >
-          QTY
-        </div>
-      </DraggableResizable>
-      <DraggableResizable
-        layout={tempLayout.amount}
-        onDragResize={(data) => {
-          setTempLayout((prev) => ({
-            ...prev,
-            amount: {
-              ...prev.amount,
-              ...data,
-            },
-          }));
-        }}
-      >
-        <div
-          style={{
-            position: "absolute",
-            fontWeight: "bold",
-            color: "#2563EB",
-            fontSize: amountSize,
-          }}
-        >
-          AMOUNT
-        </div>
-      </DraggableResizable>
     </div>
   );
 };

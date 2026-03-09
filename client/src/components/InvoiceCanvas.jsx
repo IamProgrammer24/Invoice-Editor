@@ -31,6 +31,7 @@ const InvoiceCanvas = ({ invoiceData }) => {
   } = useInvoiceLayout();
 
   const [tempLayout, setTempLayout] = useState(layout);
+  console.log(layout.description);
 
   useEffect(() => {
     if (editMode) {
@@ -92,6 +93,18 @@ const InvoiceCanvas = ({ invoiceData }) => {
   const companyNameSize = getDynamicFontSize(tempLayout.companyName);
   const companyAddSize = getDynamicFontSize(tempLayout.companyAdd);
   const companyMailSize = getDynamicFontSize(tempLayout.companyMail);
+  const billToSize = getDynamicFontSize(tempLayout.billTo);
+  const billNameSize = getDynamicFontSize(tempLayout.billName);
+  const billDateSize = getDynamicFontSize(tempLayout.billDate);
+  const billDate1Size = getDynamicFontSize(tempLayout.billDate1);
+  const invoiceNumberSize = getDynamicFontSize(tempLayout.invoiceNumber);
+  const invoiceNumber1Szide = getDynamicFontSize(tempLayout.invoiceNumber1);
+  const amountDueSize = getDynamicFontSize(tempLayout.amountDue);
+  const amountDue1Size = getDynamicFontSize(tempLayout.amountDue1);
+  const descriptionSize = getDynamicFontSize(tempLayout.description);
+  const rateSize = getDynamicFontSize(tempLayout.rateSize);
+  const qtySize = getDynamicFontSize(tempLayout.qty);
+  const amountSize = getDynamicFontSize(tempLayout.amount);
 
   if (!editMode) {
     console.log("Current layout:", layout);
@@ -130,13 +143,13 @@ const InvoiceCanvas = ({ invoiceData }) => {
           className="relative bg-white shadow-xl p-12 text-gray-800"
           style={{ width: "794px", minHeight: "1123px" }}
         >
-          {/* <div ref={companyRef}>
+          <div ref={companyRef}>
             <CompanySection
               data={invoiceData}
               refs={{ titleRef }}
               editMode={false}
             />
-          </div> */}
+          </div>
 
           <div ref={customerRef}>
             <CustomerSection data={invoiceData} />
@@ -211,6 +224,177 @@ const InvoiceCanvas = ({ invoiceData }) => {
             }}
           >
             contact@techsolutions.com
+          </div>
+          <div
+            style={{
+              position: "absolute",
+              left: "46px",
+              top: "246px",
+              width: "200px",
+              height: "50px",
+              fontSize: "16px",
+              fontWeight: "bold",
+              color: "#2563EB",
+            }}
+          >
+            Billed To
+          </div>
+          <div
+            style={{
+              position: "absolute",
+              left: "48px",
+              top: "270px",
+              width: "200px",
+              height: "50px",
+              fontSize: "16px",
+            }}
+          >
+            Rahul Sharma <br />
+            Delhi, India
+          </div>
+          <div
+            style={{
+              position: "absolute",
+              left: "228px",
+              top: "246px",
+              width: "200px",
+              height: "50px",
+              fontSize: "16px",
+              fontWeight: "bold",
+              color: "#2563EB",
+            }}
+          >
+            Date Issued
+          </div>
+          <div
+            style={{
+              position: "absolute",
+              left: "228px",
+              top: "270px",
+              width: "200px",
+              height: "50px",
+              fontSize: "16px",
+            }}
+          >
+            27 Feb 2026
+          </div>
+          <div
+            style={{
+              position: "absolute",
+              left: "410px",
+              top: "246px",
+              width: "200px",
+              height: "50px",
+              fontSize: "16px",
+              fontWeight: "bold",
+              color: "#2563EB",
+            }}
+          >
+            Invoice Number
+          </div>
+          <div
+            style={{
+              position: "absolute",
+              left: "408px",
+              top: "270px",
+              width: "200px",
+              height: "50px",
+              fontSize: "16px",
+            }}
+          >
+            INV-101
+          </div>
+          <div
+            style={{
+              position: "absolute",
+              left: "590px",
+              top: "246px",
+              width: "200px",
+              height: "50px",
+              fontSize: "16px",
+              fontWeight: "bold",
+              color: "#2563EB",
+            }}
+          >
+            Amount Due
+          </div>
+          <div
+            style={{
+              position: "absolute",
+              left: "590px",
+              top: "269px",
+              width: "200px",
+              height: "50px",
+              fontSize: "19px",
+              fontWeight: "bold",
+            }}
+          >
+            ₹
+          </div>
+          <div
+            style={{
+              position: "absolute",
+              left: "50px",
+              top: "358px",
+              width: "694px",
+            }}
+            className="border-b-2 border-blue-600"
+          ></div>
+          <div
+            style={{
+              position: "absolute",
+              left: "48px",
+              top: "392px",
+              width: "200px",
+              height: "50px",
+              fontSize: "14px",
+              fontWeight: "bold",
+              color: "#2563EB",
+            }}
+          >
+            DESCRIPTION
+          </div>
+          <div
+            style={{
+              position: "absolute",
+              left: "463px",
+              top: "397px",
+              width: "200px",
+              height: "50px",
+              fontSize: "14px",
+              fontWeight: "bold",
+              color: "#2563EB",
+            }}
+          >
+            RATE
+          </div>
+          <div
+            style={{
+              position: "absolute",
+              left: "550px",
+              top: "397px",
+              width: "200px",
+              height: "50px",
+              fontSize: "14px",
+              fontWeight: "bold",
+              color: "#2563EB",
+            }}
+          >
+            QTY
+          </div>
+          <div
+            style={{
+              position: "absolute",
+              left: "683px",
+              top: "397px",
+              width: "200px",
+              height: "50px",
+              fontSize: "14px",
+              fontWeight: "bold",
+              color: "#2563EB",
+            }}
+          >
+            AMOUNT
           </div>
         </div>
       </div>
@@ -366,7 +550,286 @@ const InvoiceCanvas = ({ invoiceData }) => {
             contact@techsolutions.com
           </div>
         </DraggableResizable>
+        <DraggableResizable
+          layout={tempLayout.billTo}
+          onDragResize={(data) => {
+            setTempLayout((prev) => ({
+              ...prev,
+              billTo: {
+                ...prev.billTo,
+                ...data,
+              },
+            }));
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              fontWeight: "bold",
+
+              fontSize: billToSize,
+              color: "#2563EB",
+            }}
+          >
+            Billed To
+          </div>
+        </DraggableResizable>
+        <DraggableResizable
+          layout={tempLayout.billName}
+          onDragResize={(data) => {
+            setTempLayout((prev) => ({
+              ...prev,
+              billName: {
+                ...prev.billName,
+                ...data,
+              },
+            }));
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+
+              fontSize: billNameSize,
+            }}
+          >
+            Rahul Sharma <br />
+            Delhi, India
+          </div>
+        </DraggableResizable>
+        <DraggableResizable
+          layout={tempLayout.billDate}
+          onDragResize={(data) => {
+            setTempLayout((prev) => ({
+              ...prev,
+              billDate: {
+                ...prev.billDate,
+                ...data,
+              },
+            }));
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              fontSize: billDateSize,
+              fontWeight: "bold",
+              color: "#2563EB",
+            }}
+          >
+            Date Issued
+          </div>
+        </DraggableResizable>
+        <DraggableResizable
+          layout={tempLayout.billDate1}
+          onDragResize={(data) => {
+            setTempLayout((prev) => ({
+              ...prev,
+              billDate1: {
+                ...prev.billDate1,
+                ...data,
+              },
+            }));
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+
+              fontSize: billDate1Size,
+            }}
+          >
+            27 Feb 2026
+          </div>
+        </DraggableResizable>
+        <DraggableResizable
+          layout={tempLayout.invoiceNumber}
+          onDragResize={(data) => {
+            setTempLayout((prev) => ({
+              ...prev,
+              invoiceNumber: {
+                ...prev.invoiceNumber,
+                ...data,
+              },
+            }));
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+
+              fontSize: invoiceNumberSize,
+              fontWeight: "bold",
+              color: "#2563EB",
+            }}
+          >
+            Invoice Number
+          </div>
+        </DraggableResizable>
+        <DraggableResizable
+          layout={tempLayout.invoiceNumber1}
+          onDragResize={(data) => {
+            setTempLayout((prev) => ({
+              ...prev,
+              invoiceNumber1: {
+                ...prev.invoiceNumber1,
+                ...data,
+              },
+            }));
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+
+              fontSize: invoiceNumber1Szide,
+            }}
+          >
+            INV-101
+          </div>
+        </DraggableResizable>
+        <DraggableResizable
+          layout={tempLayout.amountDue}
+          onDragResize={(data) => {
+            setTempLayout((prev) => ({
+              ...prev,
+              amountDue: {
+                ...prev.amountDue,
+                ...data,
+              },
+            }));
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              fontWeight: "bold",
+              color: "#2563EB",
+              fontSize: amountDueSize,
+            }}
+          >
+            Amount Due
+          </div>
+        </DraggableResizable>
+        <DraggableResizable
+          layout={tempLayout.amountDue1}
+          onDragResize={(data) => {
+            setTempLayout((prev) => ({
+              ...prev,
+              amountDue1: {
+                ...prev.amountDue1,
+                ...data,
+              },
+            }));
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              fontWeight: "bold",
+              fontSize: amountDue1Size,
+            }}
+          >
+            ₹
+          </div>
+        </DraggableResizable>
+        <DraggableResizable layout={tempLayout.line}>
+          {" "}
+          <div className="border-b-2 border-blue-600"></div>
+        </DraggableResizable>
       </div>
+      <DraggableResizable
+        layout={tempLayout.description}
+        onDragResize={(data) => {
+          setTempLayout((prev) => ({
+            ...prev,
+            description: {
+              ...prev.description,
+              ...data,
+            },
+          }));
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            fontWeight: "bold",
+            color: "#2563EB",
+            fontSize: descriptionSize,
+          }}
+        >
+          DESCRIPTION
+        </div>
+      </DraggableResizable>
+      <DraggableResizable
+        layout={tempLayout.rate}
+        onDragResize={(data) => {
+          setTempLayout((prev) => ({
+            ...prev,
+            rate: {
+              ...prev.rate,
+              ...data,
+            },
+          }));
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            fontWeight: "bold",
+            color: "#2563EB",
+            fontSize: rateSize,
+          }}
+        >
+          RATE
+        </div>
+      </DraggableResizable>
+      <DraggableResizable
+        layout={tempLayout.qty}
+        onDragResize={(data) => {
+          setTempLayout((prev) => ({
+            ...prev,
+            qty: {
+              ...prev.qty,
+              ...data,
+            },
+          }));
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            fontWeight: "bold",
+            color: "#2563EB",
+            fontSize: qtySize,
+          }}
+        >
+          QTY
+        </div>
+      </DraggableResizable>
+      <DraggableResizable
+        layout={tempLayout.amount}
+        onDragResize={(data) => {
+          setTempLayout((prev) => ({
+            ...prev,
+            amount: {
+              ...prev.amount,
+              ...data,
+            },
+          }));
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            fontWeight: "bold",
+            color: "#2563EB",
+            fontSize: amountSize,
+          }}
+        >
+          AMOUNT
+        </div>
+      </DraggableResizable>
     </div>
   );
 };
